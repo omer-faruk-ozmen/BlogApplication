@@ -18,9 +18,13 @@ namespace BlogApplication.Domain.Entities
         public bool Published { get; set; }
         public DateTime PublishedDate { get; set; }
         public string? Content { get; set; }
-        public ICollection<AppUser>? AppUsers { get; set; }
-        public PostComment? PostComment { get; set; }
-        public PostMeta? PostMeta { get; set; }
-        public PostTag? PostTag { get; set; }
+        public AppUser? AppUser { get; set; }
+        public ICollection<PostComment>? PostComments { get; set; }
+        public ICollection<Category>? Categories { get; set; }
+        public ICollection<PostMeta>? PostMetas { get; set; }
+        public ICollection<Tag>? Tags { get; set; }
+
+        
+
     }
 }

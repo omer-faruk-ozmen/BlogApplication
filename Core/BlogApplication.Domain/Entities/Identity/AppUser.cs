@@ -13,6 +13,6 @@ namespace BlogApplication.Domain.Entities.Identity
         public string? LastName { get; set; }
         public string? RefreshToken { get; set; }
         public DateTime RefreshTokenEndDate { get; set; }
-        public Post? Post { get; set; }
+        public ICollection<Post>? Posts { get; set; }
     }
 }

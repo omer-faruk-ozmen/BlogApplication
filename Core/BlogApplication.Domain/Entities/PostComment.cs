@@ -13,7 +13,8 @@ namespace BlogApplication.Domain.Entities
         public string? Title { get; set; }
         public string? Content { get; set; }
         public DateTime PublishedDate { get; set; }
-        public ICollection<Post>? Posts { get; set; }
+        public Guid PostId { get; set; }
+        public Post? Post { get; set; }
 
     }
 }

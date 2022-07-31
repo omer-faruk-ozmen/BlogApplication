@@ -12,6 +12,6 @@ namespace BlogApplication.Domain.Entities
         public string? Title { get; set; }
         public string? MetaTitle { get; set; }
         public string? Content { get; set; }
-        public PostTag? PostTags { get; set; }
+        public ICollection<Post>? Posts { get; set; }
     }
 }

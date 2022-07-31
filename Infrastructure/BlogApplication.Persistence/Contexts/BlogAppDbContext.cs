@@ -18,9 +18,7 @@ namespace BlogApplication.Persistence.Contexts
         public DbSet<Post>? Posts { get; set; }
         public DbSet<PostComment>? PostComments { get; set; }
         public DbSet<Category>? Categories { get; set; }
-        public DbSet<PostCategory>? PostCategories  { get; set; }
         public DbSet<PostMeta>? PostMetas { get; set; }
-        public DbSet<PostTag>? PostTags { get; set; }
         public DbSet<Tag>? Tags { get; set; }
 
 
@@ -40,5 +38,6 @@ namespace BlogApplication.Persistence.Contexts
 
             return await base.SaveChangesAsync(cancellationToken);
         }
+
     }
 }
