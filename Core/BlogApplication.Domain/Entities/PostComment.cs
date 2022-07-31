@@ -12,6 +12,7 @@ namespace BlogApplication.Domain.Entities
     {
         public string? Title { get; set; }
         public string? Content { get; set; }
+        public bool Privacy { get; set; }
         public DateTime PublishedDate { get; set; }
         public Guid PostId { get; set; }
         public Post? Post { get; set; }
