@@ -13,11 +13,11 @@ namespace BlogApplication.Infrastructure.Persistence.Repositories
 {
     public class ReadRepository<TEntity> : IReadRepository<TEntity> where TEntity : BaseEntity
     {
-        private readonly BlogApplicationContext _context;
+        private readonly DbContext _context;
 
         protected DbSet<TEntity> Table => _context.Set<TEntity>();
 
-        public ReadRepository(BlogApplicationContext context)
+        public ReadRepository(DbContext context)
         {
             _context = context;
         }
@@ -101,7 +101,12 @@ namespace BlogApplication.Infrastructure.Persistence.Repositories
             if (noTracking)
                 query = query.AsNoTracking();
 
+
+
             return (await query.SingleOrDefaultAsync())!;
+
+
+
         }
 
         public virtual Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, bool noTracking = true, params Expression<Func<TEntity, object>>[] includes)

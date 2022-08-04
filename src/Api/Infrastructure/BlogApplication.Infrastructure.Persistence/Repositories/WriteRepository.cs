@@ -13,9 +13,9 @@ namespace BlogApplication.Infrastructure.Persistence.Repositories
 {
     public class WriteRepository<TEntity> : IWriteRepository<TEntity> where TEntity : BaseEntity
     {
-        private readonly BlogApplicationContext _context;
+        private readonly DbContext _context;
 
-        public WriteRepository(BlogApplicationContext context)
+        public WriteRepository(DbContext context)
         {
             _context = context;
         }
@@ -91,7 +91,7 @@ namespace BlogApplication.Infrastructure.Persistence.Repositories
 
         public virtual bool DeleteRange(Expression<Func<TEntity, bool>> predicate)
         {
-            _context.RemoveRange(predicate);
+            _context.RemoveRange(Table.Where(predicate));
             return _context.SaveChanges() > 0;
         }
 

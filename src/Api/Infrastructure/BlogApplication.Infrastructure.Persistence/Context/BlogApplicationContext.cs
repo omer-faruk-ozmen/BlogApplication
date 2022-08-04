@@ -98,9 +98,7 @@ public class BlogApplicationContext : DbContext
 
         foreach (var entity in entities)
         {
-
-            if (entity.CreateDate == DateTime.MinValue)
-                entity.CreateDate = (DateTime.UtcNow).AddHours(3);
+            entity.CreateDate = (DateTime.UtcNow);
         }
     }
 
