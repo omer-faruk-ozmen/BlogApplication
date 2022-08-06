@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using BlogApplication.Api.Domain.Models;
 using BlogApplication.Common.Models.Queries;
+using BlogApplication.Common.Models.RequestModels;
 
 namespace BlogApplication.Api.Application.Mapping
 {
@@ -14,6 +15,10 @@ namespace BlogApplication.Api.Application.Mapping
         public MappingProfile()
         {
             CreateMap<User, LoginUserViewModel>().ReverseMap();
+
+            CreateMap<CreateUserCommandRequest, User>();
+
+            CreateMap<UpdateUserCommandRequest, User>();
         }
 
     }

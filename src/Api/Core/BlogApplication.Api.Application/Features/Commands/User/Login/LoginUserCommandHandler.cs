@@ -15,9 +15,9 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace BlogApplication.Api.Application.Features.Commands.User
+namespace BlogApplication.Api.Application.Features.Commands.User.Login
 {
-    public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginUserViewModel>
+    public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, LoginUserViewModel>
     {
         private readonly IUserWriteRepository _userWriteRepository;
         private readonly IUserReadRepository _userReadRepository;
@@ -32,7 +32,7 @@ namespace BlogApplication.Api.Application.Features.Commands.User
             _configuration = configuration;
         }
 
-        public async Task<LoginUserViewModel> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+        public async Task<LoginUserViewModel> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
         {
             var dbUser = await _userReadRepository.GetSingleAsync(i => i.EmailAddress == request.EmailAddress);
 

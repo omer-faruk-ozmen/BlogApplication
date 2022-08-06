@@ -18,10 +18,27 @@ namespace BlogApplication.Api.WebApi.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login([FromBody]LoginUserCommand command)
+        public async Task<IActionResult> Login([FromBody] LoginUserCommandRequest command)
         {
             var res = await _mediator.Send(command);
             return Ok(res);
         }
+
+        [HttpPost]
+        [Route("Register")]
+        public async Task<IActionResult> Create([FromBody] CreateUserCommandRequest command)
+        {
+            var guid = await _mediator.Send(command);
+            return Ok(guid);
+        }
+
+        [HttpPost]
+        [Route("Update")]
+        public async Task<IActionResult> UpdateUser([FromBody] CreateUserCommandRequest command)
+        {
+            var guid = await _mediator.Send(command);
+            return Ok(guid);
+        }
+
     }
 }

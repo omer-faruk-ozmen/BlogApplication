@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using BlogApplication.Common.Models.RequestModels;
 using FluentValidation;
 
-namespace BlogApplication.Api.Application.Features.Commands.User
+namespace BlogApplication.Api.Application.Features.Commands.User.Login
 {
-    public class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
+    public class LoginUserCommandValidator : AbstractValidator<LoginUserCommandRequest>
     {
         public LoginUserCommandValidator()
         {

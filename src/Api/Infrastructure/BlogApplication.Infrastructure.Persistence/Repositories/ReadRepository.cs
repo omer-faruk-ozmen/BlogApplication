@@ -89,7 +89,7 @@ namespace BlogApplication.Infrastructure.Persistence.Repositories
 
         public virtual async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> predicate, bool noTracking = true, params Expression<Func<TEntity, object>>[] includes)
         {
-            IQueryable<TEntity> query = Table;
+            var query = Table.AsQueryable();
 
             if (predicate != null)
             {
@@ -103,7 +103,7 @@ namespace BlogApplication.Infrastructure.Persistence.Repositories
 
 
 
-            return (await query.SingleOrDefaultAsync())!;
+            return await query.SingleOrDefaultAsync();
 
 
 
