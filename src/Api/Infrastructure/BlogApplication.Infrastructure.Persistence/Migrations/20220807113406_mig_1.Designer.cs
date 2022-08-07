@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BlogApplication.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(BlogApplicationContext))]
-    [Migration("20220803093513_mig_1")]
+    [Migration("20220807113406_mig_1")]
     partial class mig_1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,9 +34,15 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -159,8 +165,8 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("CreatedById")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("LikedStatus")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("PostCommentId")
                         .HasColumnType("uuid");
@@ -169,8 +175,6 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedUserId");
 
                     b.HasIndex("PostCommentId");
 
@@ -190,9 +194,6 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("CreatedById")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("PostId")
                         .HasColumnType("uuid");
 
@@ -201,7 +202,7 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedUserId");
+                    b.HasIndex("CreatedById");
 
                     b.HasIndex("PostId");
 
@@ -230,14 +231,9 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("PostLikes");
                 });
@@ -252,9 +248,15 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -363,28 +365,20 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("BlogApplication.Api.Domain.Models.PostCommentLikes", b =>
                 {
-                    b.HasOne("BlogApplication.Api.Domain.Models.User", "CreatedUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BlogApplication.Api.Domain.Models.PostComment", "PostComment")
                         .WithMany("PostCommentLikeds")
                         .HasForeignKey("PostCommentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CreatedUser");
-
                     b.Navigation("PostComment");
                 });
 
             modelBuilder.Entity("BlogApplication.Api.Domain.Models.PostFavorite", b =>
                 {
-                    b.HasOne("BlogApplication.Api.Domain.Models.User", "CreatedUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedUserId")
+                    b.HasOne("BlogApplication.Api.Domain.Models.User", "CreatedBy")
+                        .WithMany("PostFavorites")
+                        .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -394,7 +388,7 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CreatedUser");
+                    b.Navigation("CreatedBy");
 
                     b.Navigation("Post");
                 });
@@ -402,14 +396,10 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("BlogApplication.Api.Domain.Models.PostLikes", b =>
                 {
                     b.HasOne("BlogApplication.Api.Domain.Models.Post", "Post")
-                        .WithMany()
+                        .WithMany("PostLikes")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("BlogApplication.Api.Domain.Models.User", null)
-                        .WithMany("PostLikeds")
-                        .HasForeignKey("UserId");
 
                     b.Navigation("Post");
                 });
@@ -449,6 +439,8 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                     b.Navigation("PostComments");
 
                     b.Navigation("PostFavorites");
+
+                    b.Navigation("PostLikes");
                 });
 
             modelBuilder.Entity("BlogApplication.Api.Domain.Models.PostComment", b =>
@@ -460,7 +452,7 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                 {
                     b.Navigation("PostComments");
 
-                    b.Navigation("PostLikeds");
+                    b.Navigation("PostFavorites");
 
                     b.Navigation("Posts");
                 });

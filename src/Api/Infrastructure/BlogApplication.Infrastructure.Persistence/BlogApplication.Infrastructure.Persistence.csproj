@@ -24,4 +24,8 @@
     <ProjectReference Include="..\..\Core\BlogApplication.Api.Domain\BlogApplication.Api.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

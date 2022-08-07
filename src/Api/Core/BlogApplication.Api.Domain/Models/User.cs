@@ -16,7 +16,7 @@ namespace BlogApplication.Api.Domain.Models
         public bool EmailConfirmed { get; set; }
 
         public virtual ICollection<Post> Posts { get; set; }
+        public virtual ICollection<PostFavorite> PostFavorites { get; set; }
         public virtual ICollection<PostComment> PostComments { get; set; }
-        public virtual ICollection<PostLikes> PostLikeds { get; set; }
     }
 }

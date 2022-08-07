@@ -15,7 +15,9 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
-                    Content = table.Column<string>(type: "text", nullable: false)
+                    Content = table.Column<string>(type: "text", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,7 +45,9 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
-                    Content = table.Column<string>(type: "text", nullable: false)
+                    Content = table.Column<string>(type: "text", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -154,7 +158,6 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     PostId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -168,8 +171,8 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PostFavorites_Users_CreatedUserId",
-                        column: x => x.CreatedUserId,
+                        name: "FK_PostFavorites_Users_CreatedById",
+                        column: x => x.CreatedById,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -183,7 +186,6 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                     PostId = table.Column<Guid>(type: "uuid", nullable: false),
                     LikedStatus = table.Column<int>(type: "integer", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreateDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -196,11 +198,6 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                         principalTable: "Posts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PostLikes_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -233,8 +230,8 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     PostCommentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    LikedStatus = table.Column<int>(type: "integer", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -247,23 +244,12 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                         principalTable: "PostComments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PostCommentLikes_Users_CreatedUserId",
-                        column: x => x.CreatedUserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_CategoryPost_PostsId",
                 table: "CategoryPost",
                 column: "PostsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PostCommentLikes_CreatedUserId",
-                table: "PostCommentLikes",
-                column: "CreatedUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PostCommentLikes_PostCommentId",
@@ -281,9 +267,9 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostFavorites_CreatedUserId",
+                name: "IX_PostFavorites_CreatedById",
                 table: "PostFavorites",
-                column: "CreatedUserId");
+                column: "CreatedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PostFavorites_PostId",
@@ -294,11 +280,6 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                 name: "IX_PostLikes_PostId",
                 table: "PostLikes",
                 column: "PostId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PostLikes_UserId",
-                table: "PostLikes",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_CreatedById",

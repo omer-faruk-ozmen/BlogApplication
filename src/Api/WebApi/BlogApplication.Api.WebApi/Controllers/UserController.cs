@@ -1,4 +1,6 @@
-﻿using BlogApplication.Common.Models.RequestModels;
+﻿using BlogApplication.Api.Application.Features.Commands.User.ConfirmEmail;
+using BlogApplication.Common.Events.User;
+using BlogApplication.Common.Models.RequestModels.User;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +37,22 @@ namespace BlogApplication.Api.WebApi.Controllers
         [HttpPost]
         [Route("Update")]
         public async Task<IActionResult> UpdateUser([FromBody] CreateUserCommandRequest command)
+        {
+            var guid = await _mediator.Send(command);
+            return Ok(guid);
+        }
+
+        [HttpPost]
+        [Route("Confirm")]
+        public async Task<IActionResult> ConfirmEmail(Guid id)
+        {
+            var guid = await _mediator.Send(new ConfirmEmailCommandRequest() { ConfirmationId = id });
+            return Ok(guid);
+        }
+
+        [HttpPost]
+        [Route("ChangePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] UserPasswordChangedCommandRequest command)
         {
             var guid = await _mediator.Send(command);
             return Ok(guid);

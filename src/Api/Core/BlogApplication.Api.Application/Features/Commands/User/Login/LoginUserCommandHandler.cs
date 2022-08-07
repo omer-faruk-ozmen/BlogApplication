@@ -10,7 +10,7 @@ using BlogApplication.Api.Application.Interfaces.Repositories.User;
 using BlogApplication.Common.Infrastructure;
 using BlogApplication.Common.Infrastructure.Exceptions;
 using BlogApplication.Common.Models.Queries;
-using BlogApplication.Common.Models.RequestModels;
+using BlogApplication.Common.Models.RequestModels.User;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

@@ -19,8 +19,6 @@ namespace BlogApplication.Infrastructure.Persistence.Context
                     .RuleFor(i => i.CreateDate, i => i.Date.Between(DateTime.Now.AddDays(-200), DateTime.Now))
                     .RuleFor(i => i.FirstName, i => i.Person.FirstName)
                     .RuleFor(i => i.LastName, i => i.Person.LastName)
-                    .RuleFor(i => i.EmailAddress, i => i.Internet.Email())
-                    .RuleFor(i => i.UserName, i => i.Internet.UserName())
                     .RuleFor(i => i.Password, i => PasswordEncryptor.Encrypt(i.Internet.Password()))
                     .RuleFor(i => i.EmailConfirmed, i => i.PickRandom(true, false))
                     .Generate(500);
@@ -43,6 +41,16 @@ namespace BlogApplication.Infrastructure.Persistence.Context
 
             var users = getUsers();
 
+            foreach (var user in users)
+            {
+                var result = new Faker<User>("tr").RuleFor(i => i.EmailAddress, i => i.Internet.Email(user.FirstName, user.LastName))
+                    .RuleFor(i => i.UserName, i => i.Internet.UserName(user.FirstName, user.LastName))
+                    .Generate();
+
+                user.EmailAddress = result.EmailAddress;
+                user.UserName = result.UserName;
+            }
+
             var userIds = users.Select(i => i.Id);
 
             await context.Users.AddRangeAsync(users);
@@ -51,7 +59,7 @@ namespace BlogApplication.Infrastructure.Persistence.Context
             int counter = 0;
 
             var posts = new Faker<Post>("tr")
-                .RuleFor(i => i.Id,i=> guids[counter++])
+                .RuleFor(i => i.Id, i => guids[counter++])
                 .RuleFor(i => i.CreateDate, i => i.Date.Between(DateTime.Now.AddDays(-200), DateTime.Now))
                 .RuleFor(i => i.MetaTitle, i => i.Lorem.Sentence(4, 4))
                 .RuleFor(i => i.Title, i => i.Lorem.Sentence(8, 8))
@@ -64,7 +72,7 @@ namespace BlogApplication.Infrastructure.Persistence.Context
             await context.Posts.AddRangeAsync(posts);
 
             var comments = new Faker<PostComment>("tr")
-                    .RuleFor(i => i.Id,i=> Guid.NewGuid())
+                    .RuleFor(i => i.Id, i => Guid.NewGuid())
                     .RuleFor(i => i.CreateDate, i => i.Date.Between(DateTime.Now.AddDays(-200), DateTime.Now))
                     .RuleFor(i => i.Title, i => i.Lorem.Sentence(7, 7))
                     .RuleFor(i => i.Content, i => i.Lorem.Paragraph(2))

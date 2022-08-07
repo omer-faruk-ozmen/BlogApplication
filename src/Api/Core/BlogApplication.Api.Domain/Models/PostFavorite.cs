@@ -11,6 +11,6 @@ public class PostFavorite : BaseEntity
     public Guid PostId { get; set; }
     public Guid CreatedById { get; set; }
 
-    public virtual User CreatedUser { get; set; }
+    public virtual User CreatedBy { get; set; }
     public virtual Post Post { get; set; }
 }

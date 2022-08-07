@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BlogApplication.Common.Models.RequestModels;
+using BlogApplication.Common.Models.RequestModels.User;
 using FluentValidation;
 
 namespace BlogApplication.Api.Application.Features.Commands.User.Login

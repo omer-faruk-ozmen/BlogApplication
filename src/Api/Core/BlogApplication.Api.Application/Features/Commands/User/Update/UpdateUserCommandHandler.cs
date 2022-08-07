@@ -9,7 +9,7 @@ using BlogApplication.Common;
 using BlogApplication.Common.Events.User;
 using BlogApplication.Common.Infrastructure;
 using BlogApplication.Common.Infrastructure.Exceptions;
-using BlogApplication.Common.Models.RequestModels;
+using BlogApplication.Common.Models.RequestModels.User;
 using MediatR;
 
 namespace BlogApplication.Api.Application.Features.Commands.User.Update

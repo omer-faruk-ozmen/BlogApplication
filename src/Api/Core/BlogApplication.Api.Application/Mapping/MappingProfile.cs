@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using BlogApplication.Api.Domain.Models;
 using BlogApplication.Common.Models.Queries;
-using BlogApplication.Common.Models.RequestModels;
+using BlogApplication.Common.Models.RequestModels.Post;
+using BlogApplication.Common.Models.RequestModels.PostComment;
+using BlogApplication.Common.Models.RequestModels.User;
 
 namespace BlogApplication.Api.Application.Mapping
 {
@@ -19,6 +21,10 @@ namespace BlogApplication.Api.Application.Mapping
             CreateMap<CreateUserCommandRequest, User>();
 
             CreateMap<UpdateUserCommandRequest, User>();
+
+            CreateMap<CreatePostCommandRequest, Post>().ReverseMap();
+
+            CreateMap<CreatePostCommentCommandRequest, PostComment>().ReverseMap();
         }
 
     }

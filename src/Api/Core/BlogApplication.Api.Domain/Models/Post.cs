@@ -16,7 +16,8 @@ public class Post : BaseEntity
     public Guid CreatedById { get; set; }
     public virtual User CreatedBy { get; set; }
     public virtual ICollection<PostComment> PostComments { get; set; }
-    public virtual ICollection<PostFavorite> PostFavorites  { get; set; }
+    public virtual ICollection<PostFavorite> PostFavorites { get; set; }
+    public virtual ICollection<PostLikes> PostLikes { get; set; }
     public virtual ICollection<Tag> Tags { get; set; }
     public virtual ICollection<Category> Categories { get; set; }
 }

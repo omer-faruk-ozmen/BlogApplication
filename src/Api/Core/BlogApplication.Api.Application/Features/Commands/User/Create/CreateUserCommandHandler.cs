@@ -9,7 +9,7 @@ using BlogApplication.Common;
 using BlogApplication.Common.Events.User;
 using BlogApplication.Common.Infrastructure;
 using BlogApplication.Common.Infrastructure.Exceptions;
-using BlogApplication.Common.Models.RequestModels;
+using BlogApplication.Common.Models.RequestModels.User;
 using MediatR;
 
 namespace BlogApplication.Api.Application.Features.Commands.User.Create
@@ -29,6 +29,9 @@ namespace BlogApplication.Api.Application.Features.Commands.User.Create
 
         public async Task<Guid> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
         {
+
+            request.Password = PasswordEncryptor.Encrypt(request.Password);
+
             var existsUser = await _userReadRepository.GetSingleAsync(i => i.EmailAddress == request.EmailAddress);
 
             if (existsUser is not null)
@@ -36,7 +39,11 @@ namespace BlogApplication.Api.Application.Features.Commands.User.Create
 
             var dbUser = _mapper.Map<Domain.Models.User>(request);
 
-            dbUser.UserName = request.FirstName + request.LastName + new Random(100000);
+
+
+            var randomNum = new Random();
+
+            dbUser.UserName = request.FirstName + request.LastName + randomNum.Next(Int32.MaxValue);
 
 
             var rows = await _userWriteRepository.AddAsync(dbUser);

@@ -98,7 +98,8 @@ public class BlogApplicationContext : DbContext
 
         foreach (var entity in entities)
         {
-            entity.CreateDate = (DateTime.UtcNow);
+            entity.CreateDate = DateTime.UtcNow.AddHours(3);
+            entity.UpdatedDate = DateTime.UtcNow.AddHours(3);
         }
     }
 
@@ -106,7 +107,7 @@ public class BlogApplicationContext : DbContext
     {
         foreach (var entity in entities)
         {
-            entity.UpdatedDate = DateTime.UtcNow;
+            entity.UpdatedDate = DateTime.UtcNow.AddHours(3);
         }
     }
 }

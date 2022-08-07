@@ -5,14 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using BlogApplication.Common.Models;
 
-namespace BlogApplication.Api.Domain.Models
+namespace BlogApplication.Common.Events.PostComment
 {
-    public class PostCommentLikes : BaseEntity
+    public class CreatePostCommentLikesEvent
     {
         public Guid PostCommentId { get; set; }
         public LikedStatus LikedStatus { get; set; }
-        public Guid CreatedById { get; set; }
-
-        public virtual PostComment PostComment { get; set; }
+        public Guid CreatedBy { get; set; }
     }
 }
