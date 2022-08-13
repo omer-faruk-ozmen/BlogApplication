@@ -22,9 +22,9 @@ namespace BlogApplication.Common.Models.RequestModels.PostComment
 
         }
 
-        public Guid PostId { get; set; }
+        public Guid? PostId { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
-        public Guid CreatedById { get; set; }
+        public Guid? CreatedById { get; set; }
     }
 }

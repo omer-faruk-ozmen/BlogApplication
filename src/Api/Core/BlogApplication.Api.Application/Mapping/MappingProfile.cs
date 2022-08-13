@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using BlogApplication.Api.Application.Features.Queries.GetUserDetail;
 using BlogApplication.Api.Domain.Models;
 using BlogApplication.Common.Models.Queries;
 using BlogApplication.Common.Models.RequestModels.Post;
@@ -25,6 +26,10 @@ namespace BlogApplication.Api.Application.Mapping
             CreateMap<CreatePostCommandRequest, Post>().ReverseMap();
 
             CreateMap<CreatePostCommentCommandRequest, PostComment>().ReverseMap();
+
+            CreateMap<User, UserDetailViewModel>().ReverseMap();
+            CreateMap<Post, GetPostsViewModel>()
+                .ForMember(x => x.CommentCount, y => y.MapFrom(z => z.PostComments.Count));
         }
 
     }

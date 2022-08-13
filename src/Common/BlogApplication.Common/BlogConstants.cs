@@ -14,6 +14,8 @@ namespace BlogApplication.Common
 
         public const string UserExchangeName = "UserExchange";
         public const string UserEmailChangedQueueName = "UserEmailChangedQueue";
+        public const string UserUpdateQueueName = "UserExchange";
+
         public const string FavoriteExchangeName = "FavoriteExchange";
         public const string CreatePostFavoriteQueueName = "CreatePostFavoriteQueue";
 
