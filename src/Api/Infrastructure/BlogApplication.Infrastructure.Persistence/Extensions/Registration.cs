@@ -32,8 +32,8 @@ public static class Registration
             options.UseNpgsql(Configuration.ConnectionString);
         });
 
-        var seedData = new SeedData();
-        seedData.SeedAsync().GetAwaiter().GetResult();
+        //var seedData = new SeedData();
+        //seedData.SeedAsync().GetAwaiter().GetResult();
 
         services.AddScoped<IUserReadRepository, UserReadRepository>();
         services.AddScoped<IUserWriteRepository, UserWriteRepository>();

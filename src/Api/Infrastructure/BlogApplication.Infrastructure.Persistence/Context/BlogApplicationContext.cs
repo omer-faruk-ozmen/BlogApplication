@@ -21,8 +21,7 @@ public class BlogApplicationContext : DbContext
 
     public BlogApplicationContext(DbContextOptions options) : base(options)
     {
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-        AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
+        
     }
 
 

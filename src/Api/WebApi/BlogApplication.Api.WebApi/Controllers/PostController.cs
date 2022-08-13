@@ -24,8 +24,9 @@ namespace BlogApplication.Api.WebApi.Controllers
             var result = await _mediator.Send(command);
 
             return Ok(result);
-        }
 
+
+        }
         [HttpPost]
         [Route("CreateEntryComment")]
         public async Task<IActionResult> CreateEntryComment([FromBody] CreatePostCommentCommandRequest command)
@@ -33,6 +34,7 @@ namespace BlogApplication.Api.WebApi.Controllers
             var result = await _mediator.Send(command);
 
             return Ok(result);
+
         }
     }
 }
