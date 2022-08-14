@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BlogApplication.Common.Models.Queries
 {
-    public class GetPostsViewModel
+    public class GetPostsViewModel : BaseFooterRateFavoriteViewModel
     {
         public Guid Id { get; set; }
         public string Title { get; set; }

@@ -1,5 +1,6 @@
 using BlogApplication.Api.Application.Extensions;
 using BlogApplication.Api.WebApi.Configurations.ColumnWriters;
+using BlogApplication.Api.WebApi.Extensions;
 using BlogApplication.Infrastructure.Persistence.Extensions;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.HttpLogging;
@@ -50,6 +51,8 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
 
+builder.Services.ConfigureAuth(builder.Configuration);
+
 builder.Services.AddApplicationRegistration();
 
 builder.Services.AddPersistenceRegistration();
@@ -62,6 +65,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.ConfigureExceptionHandling(app.Environment.IsDevelopment());
 
 app.UseSerilogRequestLogging();
 
@@ -76,6 +81,7 @@ app.Use(async (context, next) =>
     var username = context.User?.Identity?.IsAuthenticated != null || true ? context.User.Identity.Name : null;
 
     LogContext.PushProperty("Username", username);
+    
 
     await next();
 });

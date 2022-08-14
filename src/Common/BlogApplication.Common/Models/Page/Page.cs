@@ -20,10 +20,10 @@ namespace BlogApplication.Common.Models.Page
         public Page(int currentPage, int pageSize, int totalRowCount)
         {
             if (currentPage < 1)
-                throw new ArgumentException("Invalid page number!");
+                currentPage = 1;
 
             if (pageSize < 1)
-                throw new ArgumentException("Invalid page size!");
+                pageSize = 10;
 
             TotalRowCount = totalRowCount;
             CurrentPage = currentPage;

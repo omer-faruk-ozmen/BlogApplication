@@ -12,9 +12,9 @@ namespace BlogApplication.Common.Infrastructure.Extensions
     {
         public static async Task<PageViewModel<T>> GetPaged<T>(this IQueryable<T> query, int currentPage, int pageSize) where T : class
         {
-            var count = await query.CountAsync();
+            var totalRowCount = await query.CountAsync();
 
-            Page paging = new(currentPage = 1, pageSize = 10, count);
+            Page paging = new(currentPage, pageSize, totalRowCount);
 
             var data = await query
                 .Skip(paging.Skip)

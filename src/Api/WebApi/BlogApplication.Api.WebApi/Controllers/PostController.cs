@@ -24,9 +24,9 @@ namespace BlogApplication.Api.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPosts([FromQuery] GetPostsQueryRequest request)
+        public async Task<IActionResult> GetPosts(int page, int pageSize)
         {
-            var posts = await _mediator.Send(request);
+            var posts = await _mediator.Send(new GetPostsQueryRequest(UserId, page, pageSize));
             return Ok(posts);
         }
 

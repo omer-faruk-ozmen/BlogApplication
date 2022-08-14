@@ -6,35 +6,63 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using BlogApplication.Api.Application.Interfaces.Repositories.Post;
+using BlogApplication.Common.Infrastructure.Exceptions;
+using BlogApplication.Common.Infrastructure.Extensions;
+using BlogApplication.Common.Models;
+using BlogApplication.Common.Models.Page;
 using BlogApplication.Common.Models.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace BlogApplication.Api.Application.Features.Queries.GetPosts
 {
-    public class GetPostsQueryHandler : IRequestHandler<GetPostsQueryRequest, List<GetPostsViewModel>>
+    public class GetPostsQueryHandler : IRequestHandler<GetPostsQueryRequest, PageViewModel<GetPostsViewModel>>
     {
         private readonly IPostReadRepository _postReadRepository;
-        private readonly IMapper _mapper;
+        private readonly ILogger<GetPostsQueryHandler> _logger;
 
-        public GetPostsQueryHandler(IPostReadRepository postReadRepository, IMapper mapper)
+
+        public GetPostsQueryHandler(IPostReadRepository postReadRepository, ILogger<GetPostsQueryHandler> logger)
         {
             _postReadRepository = postReadRepository;
-            _mapper = mapper;
+            _logger = logger;
         }
 
-        public async Task<List<GetPostsViewModel>> Handle(GetPostsQueryRequest request, CancellationToken cancellationToken)
+        public async Task<PageViewModel<GetPostsViewModel>> Handle(GetPostsQueryRequest request, CancellationToken cancellationToken)
         {
-            var query = _postReadRepository.AsQueryable();
+            var query = _postReadRepository.AsQueryable().Where(i => i.Published == true);
 
 
-            query = query.Include(i => i.PostComments)
-                .Where(i => i.Published == true)
-                .OrderBy(i => i.CreateDate)
-                .Take(request.Count);
 
-            return await query.ProjectTo<GetPostsViewModel>(_mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken);
+
+            _logger.LogInformation("Inquiry has been made");
+
+            query = query
+                .Include(i => i.PostFavorites)
+                .Include(i => i.CreatedBy)
+                .Include(i => i.PostLikes);
+
+
+            var list = query.Select(i => new GetPostsViewModel()
+            {
+                Id = i.Id,
+                Summary = i.Summary,
+                Title = i.Title,
+                CreateDate = i.CreateDate,
+                Published = i.Published,
+                CommentCount = i.PostComments.Count,
+                FavoriteCount = i.PostFavorites.Count,
+                LikesCount = i.PostLikes.Count,
+                IsFavorite = request.UserId.HasValue && i.PostFavorites.Any(j => j.CreatedById == request.UserId),
+                LikedStatus = request.UserId.HasValue && i.PostLikes.Any(j => j.CreatedById == request.UserId) ? i.PostLikes.FirstOrDefault(j => j.CreatedById == request.UserId)!.LikedStatus : LikedStatus.None
+            });
+
+            var posts = await list.GetPaged(request.Page, request.PageSize);
+
+            return posts;
+
 
         }
     }
