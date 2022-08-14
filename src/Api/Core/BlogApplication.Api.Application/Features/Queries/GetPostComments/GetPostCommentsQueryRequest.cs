@@ -7,14 +7,14 @@ using BlogApplication.Common.Models.Page;
 using BlogApplication.Common.Models.Queries;
 using MediatR;
 
-namespace BlogApplication.Api.Application.Features.Queries.GetPostDetail
+namespace BlogApplication.Api.Application.Features.Queries.GetPostComments
 {
-    public class GetPostDetailQueryRequest : IRequest<GetPostDetailViewModel>
+    public class GetPostCommentsQueryRequest : BasePagedQuery, IRequest<PageViewModel<GetPostCommentsViewModel>>
     {
-        public GetPostDetailQueryRequest(Guid? userId, Guid postId)
+        public GetPostCommentsQueryRequest(Guid postId, Guid? userId, int page, int pageSize) : base(page, pageSize)
         {
-            UserId = userId;
             PostId = postId;
+            UserId = userId;
         }
 
         public Guid PostId { get; set; }

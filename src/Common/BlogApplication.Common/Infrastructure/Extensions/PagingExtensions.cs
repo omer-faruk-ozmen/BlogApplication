@@ -14,7 +14,7 @@ namespace BlogApplication.Common.Infrastructure.Extensions
         {
             var count = await query.CountAsync();
 
-            Page paging = new(currentPage, pageSize, count);
+            Page paging = new(currentPage = 1, pageSize = 10, count);
 
             var data = await query
                 .Skip(paging.Skip)

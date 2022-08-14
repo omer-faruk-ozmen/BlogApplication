@@ -1,6 +1,8 @@
-﻿using BlogApplication.Api.Application.Features.Queries.GetPostDetail;
+﻿using BlogApplication.Api.Application.Features.Queries.GetPostComments;
+using BlogApplication.Api.Application.Features.Queries.GetPostDetail;
 using BlogApplication.Api.Application.Features.Queries.GetPosts;
 using BlogApplication.Api.Application.Features.Queries.GetUserPosts;
+using BlogApplication.Common.Models.Queries;
 using BlogApplication.Common.Models.RequestModels.Post;
 using BlogApplication.Common.Models.RequestModels.PostComment;
 using MediatR;
@@ -44,6 +46,23 @@ namespace BlogApplication.Api.WebApi.Controllers
 
             var result = await _mediator.Send(new GetUserPostsQueryRequest(userId, userName, page, pageSize));
 
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("Comments/{id}")]
+        public async Task<IActionResult> GetPostComments(Guid id, int page, int pageSize)
+        {
+            var result = await _mediator.Send(new GetPostCommentsQueryRequest(id, UserId, page, pageSize));
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("Search")]
+        public async Task<IActionResult> Search([FromQuery] SearchPostQueryRequest request)
+        {
+            var result = await _mediator.Send(request);
             return Ok(result);
         }
 
