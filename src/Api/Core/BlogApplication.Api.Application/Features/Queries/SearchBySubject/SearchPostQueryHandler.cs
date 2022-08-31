@@ -29,9 +29,11 @@ namespace BlogApplication.Api.Application.Features.Queries.SearchBySubject
                 .Select(i => new SearchPostViewModel()
                 {
                     Id = i.Id,
-                    Summary = i.Summary
+                    Summary = i.Summary,
+                    Content = i.Content
                 })
-                .Where(s => s.Summary!.Contains(request.SearchText));
+                .Where(s => s.Summary.ToLower().Contains(request.SearchText.ToLower()));
+                //.Where(c=>c.Content.Contains(request.SearchText));
 
             return await result.ToListAsync(cancellationToken);
         }

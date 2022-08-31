@@ -26,10 +26,10 @@ namespace BlogApplication.Common.Models.RequestModels.Post
 
 
         public string Title { get; set; }
-        public string MetaTitle { get; set; }
+        public string? MetaTitle { get; set; }
         public string Summary { get; set; }
         public string Content { get; set; }
-        public bool Published { get; set; }
+        public bool? Published { get; set; }
         public Guid? CreatedById { get; set; }
 
     }

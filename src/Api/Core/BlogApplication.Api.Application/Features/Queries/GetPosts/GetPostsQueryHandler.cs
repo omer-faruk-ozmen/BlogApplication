@@ -32,7 +32,10 @@ namespace BlogApplication.Api.Application.Features.Queries.GetPosts
 
         public async Task<PageViewModel<GetPostsViewModel>> Handle(GetPostsQueryRequest request, CancellationToken cancellationToken)
         {
-            var query = _postReadRepository.AsQueryable().Where(i => i.Published == true);
+            var query = _postReadRepository
+                .AsQueryable()
+                .Where(i => i.Published == true)
+                ;
 
 
 
@@ -57,7 +60,9 @@ namespace BlogApplication.Api.Application.Features.Queries.GetPosts
                 LikesCount = i.PostLikes.Count,
                 IsFavorite = request.UserId.HasValue && i.PostFavorites.Any(j => j.CreatedById == request.UserId),
                 LikedStatus = request.UserId.HasValue && i.PostLikes.Any(j => j.CreatedById == request.UserId) ? i.PostLikes.FirstOrDefault(j => j.CreatedById == request.UserId)!.LikedStatus : LikedStatus.None
-            });
+            }).OrderByDescending(i=>i.CreateDate);
+
+            
 
             var posts = await list.GetPaged(request.Page, request.PageSize);
 

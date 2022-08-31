@@ -13,6 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
+
+    policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod()
+
+));
 
 
 Logger log = new LoggerConfiguration()
@@ -27,7 +32,7 @@ Logger log = new LoggerConfiguration()
             {"LogEvent", new LogEventSerializedColumnWriter()},
             {"Username",new UsernameColumnWriter()}
         })
-    .WriteTo.File("logs/log.txt")
+    //.WriteTo.File("logs/log.txt")
     .WriteTo.Seq(builder.Configuration["Seq:ServerUrl"])
     .Enrich.FromLogContext()
     .MinimumLevel.Information()
@@ -65,6 +70,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors();
 
 app.ConfigureExceptionHandling(app.Environment.IsDevelopment());
 

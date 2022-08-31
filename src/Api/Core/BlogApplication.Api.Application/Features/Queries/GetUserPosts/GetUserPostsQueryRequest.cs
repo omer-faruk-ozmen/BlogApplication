@@ -19,7 +19,7 @@ namespace BlogApplication.Api.Application.Features.Queries.GetUserPosts
 
 
         public Guid? UserId { get; set; }
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
 
 
 

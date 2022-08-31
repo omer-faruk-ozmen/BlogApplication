@@ -35,12 +35,13 @@ namespace BlogApplication.Api.Application.Features.Commands.User.ChangePassword
                 throw new DatabaseValidationException("User not found!");
 
             var encryptPass = PasswordEncryptor.Encrypt(request.OldPassword);
+            var newEncPass = PasswordEncryptor.Encrypt(request.NewPassword);
 
 
             if (dbUser.Password != encryptPass)
                 throw new DatabaseValidationException("Old password wrong!");
 
-            dbUser.Password = encryptPass;
+            dbUser.Password = newEncPass;
 
             await _userWriteRepository.UpdateAsync(dbUser);
 

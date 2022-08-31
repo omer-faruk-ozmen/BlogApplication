@@ -10,5 +10,6 @@ namespace BlogApplication.Common.Models.Queries
     {
         public Guid Id { get; set; }
         public string Summary { get; set; }
+        public string Content { get; set; }
     }
 }

@@ -26,6 +26,9 @@ namespace BlogApplication.Api.Application.Features.Commands.Post.Create
         {
             var dbPost = _mapper.Map<Domain.Models.Post>(request);
 
+            dbPost.MetaTitle = dbPost.Summary;
+            dbPost.CreatedById = Guid.Parse("13d7d772-38ea-4ff2-92f0-64d6f3bf6b92");
+
             await _postWriteRepository.AddAsync(dbPost);
 
             return dbPost.Id;
