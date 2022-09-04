@@ -4,6 +4,10 @@ namespace BlogApplication.Api.WebApi.Results
 {
     public class ValidationResponseModel
     {
+        public ValidationResponseModel()
+        {
+
+        }
         public ValidationResponseModel(IEnumerable<string> errors)
         {
             Errors = errors;

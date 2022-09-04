@@ -3,6 +3,7 @@ using BlogApplication.Api.Application.Features.Queries.GetUserDetail;
 using BlogApplication.Common.Events.User;
 using BlogApplication.Common.Models.RequestModels.User;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace BlogApplication.Api.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : BaseController
     {
         private readonly IMediator _mediator;
@@ -20,6 +22,7 @@ namespace BlogApplication.Api.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> Get(Guid id)
         {
             var user = await _mediator.Send(new GetUserDetailQueryRequest(id));
@@ -29,6 +32,7 @@ namespace BlogApplication.Api.WebApi.Controllers
 
         [HttpGet]
         [Route("UserName/{userName}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetByUserName(string userName)
         {
             var user = await _mediator.Send(new GetUserDetailQueryRequest(Guid.Empty, userName));
@@ -38,6 +42,7 @@ namespace BlogApplication.Api.WebApi.Controllers
 
         [HttpPost]
         [Route("Login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginUserCommandRequest command)
         {
             var res = await _mediator.Send(command);
@@ -46,6 +51,7 @@ namespace BlogApplication.Api.WebApi.Controllers
 
         [HttpPost]
         [Route("Register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Create([FromBody] CreateUserCommandRequest command)
         {
             var guid = await _mediator.Send(command);
@@ -62,6 +68,7 @@ namespace BlogApplication.Api.WebApi.Controllers
 
         [HttpPost]
         [Route("Confirm")]
+        [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(Guid id)
         {
             var guid = await _mediator.Send(new ConfirmEmailCommandRequest() { ConfirmationId = id });

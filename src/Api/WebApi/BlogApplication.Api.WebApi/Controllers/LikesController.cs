@@ -3,6 +3,7 @@ using BlogApplication.Common.Models;
 using BlogApplication.Common.Models.RequestModels.Post;
 using BlogApplication.Common.Models.RequestModels.PostComment;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace BlogApplication.Api.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class LikesController : BaseController
     {
         private readonly IMediator _mediator;

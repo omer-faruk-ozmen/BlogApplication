@@ -1,6 +1,7 @@
 using BlogApplication.Api.Application.Extensions;
 using BlogApplication.Api.WebApi.Configurations.ColumnWriters;
 using BlogApplication.Api.WebApi.Extensions;
+using BlogApplication.Api.WebApi.Infrastructure.ActionFilters;
 using BlogApplication.Infrastructure.Persistence.Extensions;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.HttpLogging;
@@ -34,6 +35,7 @@ Logger log = new LoggerConfiguration()
         })
     //.WriteTo.File("logs/log.txt")
     .WriteTo.Seq(builder.Configuration["Seq:ServerUrl"])
+    .WriteTo.Console()
     .Enrich.FromLogContext()
     .MinimumLevel.Information()
     .CreateLogger();
@@ -50,7 +52,16 @@ builder.Services.AddHttpLogging(logging =>
     logging.ResponseBodyLogLimit = 4096;
 });
 
-builder.Services.AddControllers().AddFluentValidation();
+builder.Services
+    .AddControllers(opt => opt.Filters.Add<ValidationModelStateFilter>())
+    .AddJsonOptions(opt =>
+    {
+        opt.JsonSerializerOptions.PropertyNamingPolicy = null;
+    })
+    .AddFluentValidation().ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true);
+
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
@@ -81,6 +92,8 @@ app.UseHttpLogging();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.Use(async (context, next) =>
@@ -88,7 +101,7 @@ app.Use(async (context, next) =>
     var username = context.User?.Identity?.IsAuthenticated != null || true ? context.User.Identity.Name : null;
 
     LogContext.PushProperty("Username", username);
-    
+
 
     await next();
 });

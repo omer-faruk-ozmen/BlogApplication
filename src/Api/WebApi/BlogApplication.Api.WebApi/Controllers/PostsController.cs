@@ -6,6 +6,7 @@ using BlogApplication.Common.Models.Queries;
 using BlogApplication.Common.Models.RequestModels.Post;
 using BlogApplication.Common.Models.RequestModels.PostComment;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
@@ -68,6 +69,7 @@ namespace BlogApplication.Api.WebApi.Controllers
 
         [HttpPost]
         [Route("CreatePost")]
+        [Authorize]
         public async Task<IActionResult> CreatePost([FromBody] CreatePostCommandRequest command)
         {
             if (!command.CreatedById.HasValue)
@@ -81,6 +83,7 @@ namespace BlogApplication.Api.WebApi.Controllers
         }
         [HttpPost]
         [Route("CreatePostComment")]
+        [Authorize]
         public async Task<IActionResult> CreatePostComment([FromBody] CreatePostCommentCommandRequest command)
         {
             if (!command.CreatedById.HasValue)
