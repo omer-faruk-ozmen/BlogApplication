@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <Folder Include="Features\Commands\Category\Create\" />
-    <Folder Include="Features\Commands\Tag\Create\" />
   </ItemGroup>
 
 </Project>

@@ -29,6 +29,7 @@ namespace BlogApplication.Api.Application.Features.Queries.GetPostDetail
                 .Include(i => i.PostFavorites)
                 .Include(i => i.CreatedBy)
                 .Include(i => i.PostLikes)
+                .Include(i => i.PostTags)
                 .Where(i => i.Id == request.PostId);
 
             var list = query.Select(i => new GetPostDetailViewModel()
@@ -44,7 +45,17 @@ namespace BlogApplication.Api.Application.Features.Queries.GetPostDetail
                 Published = i.Published,
                 LikedStatus = request.UserId.HasValue && i.PostLikes.Any(j => j.CreatedById == request.UserId) ? i.PostLikes.FirstOrDefault(j => j.CreatedById == request.UserId)!.LikedStatus : LikedStatus.None,
                 FavoriteCount = i.PostFavorites.Count,
-                UpdatedDate = i.UpdatedDate
+                UpdatedDate = i.UpdatedDate,
+                PostCategories = i.PostCategories.Select(p => new PostCategory()
+                {
+                    CategoryName = p.Category.Name
+                }).ToList(),
+                PostTags = i.PostTags.Select(p=>new PostTag()
+                {
+                    TagName = p.Tag.Name
+                }).ToList()
+
+
             });
 
             return await list.FirstOrDefaultAsync(cancellationToken) ?? throw new DatabaseValidationException("An Unexpected Error Occured");

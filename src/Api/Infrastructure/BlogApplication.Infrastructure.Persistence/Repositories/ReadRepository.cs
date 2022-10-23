@@ -13,11 +13,12 @@ namespace BlogApplication.Infrastructure.Persistence.Repositories
 {
     public class ReadRepository<TEntity> : IReadRepository<TEntity> where TEntity : BaseEntity
     {
-        private readonly DbContext _context;
+        private readonly BlogApplicationContext _context;
 
-        protected DbSet<TEntity> Table => _context.Set<TEntity>();
+        public DbSet<TEntity> Table => _context.Set<TEntity>();
+        
 
-        public ReadRepository(DbContext context)
+        public ReadRepository(BlogApplicationContext context)
         {
             _context = context;
         }

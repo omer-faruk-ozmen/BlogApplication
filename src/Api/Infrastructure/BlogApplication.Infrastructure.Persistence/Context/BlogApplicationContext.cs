@@ -21,7 +21,7 @@ public class BlogApplicationContext : DbContext
 
     public BlogApplicationContext(DbContextOptions options) : base(options)
     {
-        
+
     }
 
 
@@ -37,6 +37,8 @@ public class BlogApplicationContext : DbContext
 
     public DbSet<Category> Categories { get; set; }
     public DbSet<Tag> Tags { get; set; }
+    public DbSet<PostCategory> PostCategories { get; set; }
+    public DbSet<PostTag> PostTags { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -48,6 +50,41 @@ public class BlogApplicationContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<PostCategory>()
+            .HasKey(p => new
+            {
+                p.CategoryId,
+                p.PostId
+            });
+
+        modelBuilder.Entity<PostCategory>()
+            .HasOne(p => p.Category)
+            .WithMany(p => p.PostCategories)
+            .HasForeignKey(p => p.CategoryId).IsRequired();
+
+        modelBuilder.Entity<PostCategory>()
+            .HasOne(p => p.Post)
+            .WithMany(p => p.PostCategories)
+            .HasForeignKey(p => p.PostId).IsRequired();
+        
+
+
+        modelBuilder.Entity<PostTag>()
+            .HasKey(p => new { p.PostId, p.TagId });
+
+        modelBuilder.Entity<PostTag>()
+            .HasOne(p => p.Tag)
+            .WithMany(p => p.PostTags)
+            .HasForeignKey(p => p.TagId);
+
+        modelBuilder.Entity<PostTag>()
+            .HasOne(p => p.Post)
+            .WithMany(p => p.PostTags)
+            .HasForeignKey(p => p.PostId);
+        
+
+
+
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 
@@ -77,36 +114,28 @@ public class BlogApplicationContext : DbContext
 
     private void OnBeforeSave()
     {
-        var addedEntites = ChangeTracker.Entries()
-            .Where(i => i.State == EntityState.Added)
-            .Select(i => (BaseEntity)i.Entity);
-
-        PrepareAddedEntities(addedEntites);
-
-        var modifiedEntities = ChangeTracker.Entries()
-            .Where(i => i.State == EntityState.Modified)
-            .Select(i => (BaseEntity)i.Entity);
-
-        PrepareModifiedEntities(modifiedEntities);
-    }
-
-
-
-    private void PrepareAddedEntities(IEnumerable<BaseEntity> entities)
-    {
-
-        foreach (var entity in entities)
+        foreach (var entityEntry in ChangeTracker.Entries())
         {
-            entity.CreateDate = DateTime.UtcNow.AddHours(3);
-            entity.UpdatedDate = DateTime.UtcNow.AddHours(3);
+            if (entityEntry.Entity is BaseEntity)
+            {
+                if (entityEntry.State is EntityState.Added)
+                {
+
+                    ((BaseEntity)entityEntry.Entity).CreateDate = DateTime.UtcNow.AddHours(3);
+                    ((BaseEntity)entityEntry.Entity).UpdatedDate = DateTime.UtcNow.AddHours(3);
+                }
+
+                if (entityEntry.State is EntityState.Modified)
+                {
+                    ((BaseEntity)entityEntry.Entity).UpdatedDate = DateTime.UtcNow.AddHours(3);
+                }
+
+            }
+
         }
+
+
     }
 
-    private void PrepareModifiedEntities(IEnumerable<BaseEntity> entities)
-    {
-        foreach (var entity in entities)
-        {
-            entity.UpdatedDate = DateTime.UtcNow.AddHours(3);
-        }
-    }
+
 }

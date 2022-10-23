@@ -13,6 +13,5 @@ public class PostEntityConfiguration : BaseEntityConfiguration<Api.Domain.Models
     public override void Configure(EntityTypeBuilder<Api.Domain.Models.Post> builder)
     {
         base.Configure(builder);
-        
     }
 }

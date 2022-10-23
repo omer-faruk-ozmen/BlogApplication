@@ -8,7 +8,7 @@ namespace BlogApplication.Api.Domain.Models;
 
 public class Category : BaseEntity
 {
-    public string Title { get; set; }
-    public string Content { get; set; }
-    public ICollection<Post> Posts { get; set; }
+    public string Name { get; set; }
+    //public ICollection<Post> Posts { get; set; }
+    public virtual ICollection<PostCategory> PostCategories { get; set; }
 }

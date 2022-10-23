@@ -17,5 +17,6 @@ namespace BlogApplication.Api.Application.Features.Queries.GetPosts
         }
 
         public Guid? UserId { get; set; }
+
     }
 }

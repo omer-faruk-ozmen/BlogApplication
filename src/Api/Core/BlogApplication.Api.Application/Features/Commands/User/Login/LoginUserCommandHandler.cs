@@ -69,7 +69,7 @@ namespace BlogApplication.Api.Application.Features.Commands.User.Login
 
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var expiry = DateTime.UtcNow.AddDays(10);
+            var expiry = DateTime.UtcNow.AddHours(1);
 
             var token = new JwtSecurityToken(claims: claims, expires: expiry, signingCredentials: credentials,
                 notBefore: DateTime.UtcNow);

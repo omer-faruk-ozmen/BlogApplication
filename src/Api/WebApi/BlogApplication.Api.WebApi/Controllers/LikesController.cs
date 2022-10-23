@@ -21,8 +21,8 @@ namespace BlogApplication.Api.WebApi.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
-        [Route("post/{postid}")]
+        [HttpPost]
+        [Route("post/{postId}")]
         public async Task<IActionResult> CreatePostLiked(Guid postId, LikedStatus likedStatus = LikedStatus.Like)
         {
             var result = await _mediator.Send(new CreatePostLikesCommandRequest(postId, likedStatus, UserId.Value));
@@ -30,8 +30,8 @@ namespace BlogApplication.Api.WebApi.Controllers
             return Ok(result);
         }
 
-        [HttpGet]
-        [Route("postcomment/{postcommentid}")]
+        [HttpPost]
+        [Route("postcomment/{postCommentId}")]
         public async Task<IActionResult> CreatePostCommentLiked(Guid postCommentId, LikedStatus likedStatus = LikedStatus.Like)
         {
             var result = await _mediator.Send(new CreatePostCommentLikesCommandRequest(UserId.Value, likedStatus, postCommentId));
@@ -40,8 +40,8 @@ namespace BlogApplication.Api.WebApi.Controllers
         }
 
 
-        [HttpGet]
-        [Route("deletepostliked/{postid}")]
+        [HttpPost]
+        [Route("deletepostliked/{postId}")]
         public async Task<IActionResult> DeletePostLiked(Guid postId)
         {
             var result = await _mediator.Send(new DeletePostLikesCommandRequest(postId, UserId.Value));
@@ -49,8 +49,8 @@ namespace BlogApplication.Api.WebApi.Controllers
             return Ok(result);
         }
 
-        [HttpGet]
-        [Route("deletepostcommentliked/{postcommentid}")]
+        [HttpPost]
+        [Route("deletepostcommentliked/{postCommentId}")]
         public async Task<IActionResult> DeletePostCommentLiked(Guid postCommentId)
         {
             var result = await _mediator.Send(new DeletePostLikesCommandRequest(postCommentId, UserId.Value));

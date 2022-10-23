@@ -1,4 +1,5 @@
 ﻿using BlogApplication.Api.Application.Features.Commands.Post.CreateFavorite;
+using BlogApplication.Api.Application.Features.Queries.GetUserFavorites;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -17,6 +18,17 @@ namespace BlogApplication.Api.WebApi.Controllers
         public FavoriteController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+
+        [HttpGet]
+        [Route("UserFavorites")]
+        public async Task<IActionResult> GetUserFavorites(int page, int pageSize)
+        {
+
+
+            var result = await _mediator.Send(new GetUserFavoritesQueryRequest(page, pageSize, UserId.Value));
+
+            return Ok(result);
         }
 
         [HttpPost]

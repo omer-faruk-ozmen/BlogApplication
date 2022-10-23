@@ -1,4 +1,6 @@
 using BlogApplication.Api.Application.Extensions;
+using BlogApplication.Api.Application.Interfaces.Services;
+using BlogApplication.Api.Domain.Models;
 using BlogApplication.Api.WebApi.Configurations.ColumnWriters;
 using BlogApplication.Api.WebApi.Extensions;
 using BlogApplication.Api.WebApi.Infrastructure.ActionFilters;
@@ -19,6 +21,9 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
     policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod()
 
 ));
+
+builder.Services.AddHttpContextAccessor();
+
 
 
 Logger log = new LoggerConfiguration()

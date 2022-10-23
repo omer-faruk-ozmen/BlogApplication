@@ -28,14 +28,11 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("CreateDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -112,6 +109,21 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                     b.HasIndex("CreatedById");
 
                     b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("BlogApplication.Api.Domain.Models.PostCategory", b =>
+                {
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("CategoryId", "PostId");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("PostCategories");
                 });
 
             modelBuilder.Entity("BlogApplication.Api.Domain.Models.PostComment", b =>
@@ -236,20 +248,31 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                     b.ToTable("PostLikes");
                 });
 
+            modelBuilder.Entity("BlogApplication.Api.Domain.Models.PostTag", b =>
+                {
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("PostId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("PostTags");
+                });
+
             modelBuilder.Entity("BlogApplication.Api.Domain.Models.Tag", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -301,36 +324,6 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("CategoryPost", b =>
-                {
-                    b.Property<Guid>("CategoriesId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("PostsId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("CategoriesId", "PostsId");
-
-                    b.HasIndex("PostsId");
-
-                    b.ToTable("CategoryPost");
-                });
-
-            modelBuilder.Entity("PostTag", b =>
-                {
-                    b.Property<Guid>("PostsId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("TagsId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("PostsId", "TagsId");
-
-                    b.HasIndex("TagsId");
-
-                    b.ToTable("PostTag");
-                });
-
             modelBuilder.Entity("BlogApplication.Api.Domain.Models.Post", b =>
                 {
                     b.HasOne("BlogApplication.Api.Domain.Models.User", "CreatedBy")
@@ -340,6 +333,25 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("CreatedBy");
+                });
+
+            modelBuilder.Entity("BlogApplication.Api.Domain.Models.PostCategory", b =>
+                {
+                    b.HasOne("BlogApplication.Api.Domain.Models.Category", "Category")
+                        .WithMany("PostCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BlogApplication.Api.Domain.Models.Post", "Post")
+                        .WithMany("PostCategories")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("BlogApplication.Api.Domain.Models.PostComment", b =>
@@ -402,48 +414,51 @@ namespace BlogApplication.Infrastructure.Persistence.Migrations
                     b.Navigation("Post");
                 });
 
-            modelBuilder.Entity("CategoryPost", b =>
+            modelBuilder.Entity("BlogApplication.Api.Domain.Models.PostTag", b =>
                 {
-                    b.HasOne("BlogApplication.Api.Domain.Models.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoriesId")
+                    b.HasOne("BlogApplication.Api.Domain.Models.Post", "Post")
+                        .WithMany("PostTags")
+                        .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BlogApplication.Api.Domain.Models.Post", null)
-                        .WithMany()
-                        .HasForeignKey("PostsId")
+                    b.HasOne("BlogApplication.Api.Domain.Models.Tag", "Tag")
+                        .WithMany("PostTags")
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("Tag");
                 });
 
-            modelBuilder.Entity("PostTag", b =>
+            modelBuilder.Entity("BlogApplication.Api.Domain.Models.Category", b =>
                 {
-                    b.HasOne("BlogApplication.Api.Domain.Models.Post", null)
-                        .WithMany()
-                        .HasForeignKey("PostsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BlogApplication.Api.Domain.Models.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("PostCategories");
                 });
 
             modelBuilder.Entity("BlogApplication.Api.Domain.Models.Post", b =>
                 {
+                    b.Navigation("PostCategories");
+
                     b.Navigation("PostComments");
 
                     b.Navigation("PostFavorites");
 
                     b.Navigation("PostLikes");
+
+                    b.Navigation("PostTags");
                 });
 
             modelBuilder.Entity("BlogApplication.Api.Domain.Models.PostComment", b =>
                 {
                     b.Navigation("PostCommentLikeds");
+                });
+
+            modelBuilder.Entity("BlogApplication.Api.Domain.Models.Tag", b =>
+                {
+                    b.Navigation("PostTags");
                 });
 
             modelBuilder.Entity("BlogApplication.Api.Domain.Models.User", b =>

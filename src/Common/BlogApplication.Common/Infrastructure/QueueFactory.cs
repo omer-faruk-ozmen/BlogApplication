@@ -60,10 +60,33 @@ namespace BlogApplication.Common.Infrastructure
 
             consumer.Model.QueueBind(queue: queueName, exchange: exchangeName, routingKey: queueName);
 
+            return consumer;
+        }
 
+        public static EventingBasicConsumer Receive<T>(this EventingBasicConsumer consumer, Action<T> action)
+        {
+            consumer.Received += (m, eventArgs) =>
+            {
+                var body = eventArgs.Body.ToArray();
+                var message = Encoding.UTF8.GetString(body);
+
+                var model = JsonSerializer.Deserialize<T>(message);
+
+                action(model);
+
+                consumer.Model.BasicAck(eventArgs.DeliveryTag, false);
+            };
 
             return consumer;
         }
 
+        public static EventingBasicConsumer StartConsuming(this EventingBasicConsumer consumer, string queueName)
+        {
+            consumer.Model.BasicConsume(queue: queueName,
+                autoAck: false,
+                consumer: consumer);
+
+            return consumer;
+        }
     }
 }

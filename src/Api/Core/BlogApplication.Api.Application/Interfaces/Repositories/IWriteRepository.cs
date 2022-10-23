@@ -8,7 +8,7 @@ using BlogApplication.Api.Domain.Models;
 
 namespace BlogApplication.Api.Application.Interfaces.Repositories
 {
-    public interface IWriteRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
+    public interface IWriteRepository<TEntity> : IRepository<TEntity> where TEntity :BaseEntity
     {
         Task<int> AddAsync(TEntity entity);
         int Add(TEntity entity);
@@ -34,5 +34,8 @@ namespace BlogApplication.Api.Application.Interfaces.Repositories
         Task BulkDelete(IEnumerable<TEntity> entities);
         Task BulkUpdate(IEnumerable<TEntity> entities);
         Task BulkAdd(IEnumerable<TEntity> entities);
+
+        Task<int> SaveChangesAsync();
+        int SaveChanges();
     }
 }

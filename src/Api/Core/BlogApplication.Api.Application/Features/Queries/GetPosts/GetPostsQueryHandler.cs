@@ -55,14 +55,23 @@ namespace BlogApplication.Api.Application.Features.Queries.GetPosts
                 Title = i.Title,
                 CreateDate = i.CreateDate,
                 Published = i.Published,
+                CreatedByUserName = i.CreatedBy.UserName,
                 CommentCount = i.PostComments.Count,
                 FavoriteCount = i.PostFavorites.Count,
                 LikesCount = i.PostLikes.Count,
                 IsFavorite = request.UserId.HasValue && i.PostFavorites.Any(j => j.CreatedById == request.UserId),
-                LikedStatus = request.UserId.HasValue && i.PostLikes.Any(j => j.CreatedById == request.UserId) ? i.PostLikes.FirstOrDefault(j => j.CreatedById == request.UserId)!.LikedStatus : LikedStatus.None
-            }).OrderByDescending(i=>i.CreateDate);
+                LikedStatus = request.UserId.HasValue && i.PostLikes.Any(j => j.CreatedById == request.UserId) ? i.PostLikes.FirstOrDefault(j => j.CreatedById == request.UserId)!.LikedStatus : LikedStatus.None,
+                PostTags = i.PostTags.Select(p => new PostTag()
+                {
+                    TagName = p.Tag.Name
+                }).ToList(),
+                PostCategories = i.PostCategories.Select(p => new PostCategory()
+                {
+                    CategoryName = p.Category.Name
+                }).ToList()
+            }).OrderByDescending(i => i.CreateDate);
 
-            
+
 
             var posts = await list.GetPaged(request.Page, request.PageSize);
 

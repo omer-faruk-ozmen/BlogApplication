@@ -8,6 +8,11 @@ namespace BlogApplication.Api.Domain.Models;
 
 public class Post : BaseEntity
 {
+    public Post()
+    {
+        PostTags = new HashSet<PostTag>();
+        PostCategories = new HashSet<PostCategory>();
+    }
     public string Title { get; set; }
     public string MetaTitle { get; set; }
     public string Summary { get; set; }
@@ -18,6 +23,8 @@ public class Post : BaseEntity
     public virtual ICollection<PostComment> PostComments { get; set; }
     public virtual ICollection<PostFavorite> PostFavorites { get; set; }
     public virtual ICollection<PostLikes> PostLikes { get; set; }
-    public virtual ICollection<Tag> Tags { get; set; }
-    public virtual ICollection<Category> Categories { get; set; }
+    //public virtual ICollection<Tag> Tags { get; set; }
+    //public virtual ICollection<Category> Categories { get; set; }
+    public virtual ICollection<PostCategory> PostCategories { get; set; }
+    public virtual ICollection<PostTag> PostTags { get; set; }
 }

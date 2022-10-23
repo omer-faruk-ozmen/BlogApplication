@@ -12,8 +12,10 @@ namespace BlogApplication.Api.Application.Features.Commands.Post.DeleteLikes
 {
     public class DeletePostLikesCommandHandler : IRequestHandler<DeletePostLikesCommandRequest, bool>
     {
+        
         public async Task<bool> Handle(DeletePostLikesCommandRequest request, CancellationToken cancellationToken)
         {
+
             QueueFactory.SendMessageToExchange(exchangeName: BlogConstants.LikesExchangeName,
                 exchangeType: BlogConstants.DefaultExchangeType,
                 queueName: BlogConstants.DeletePostLikesQueueName,

@@ -17,5 +17,7 @@ namespace BlogApplication.Common.Models.Queries
         public string CreateByUserName { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdatedDate { get; set; }
+        public IList<PostTag> PostTags { get; set; }
+        public IList<PostCategory> PostCategories { get; set; }
     }
 }

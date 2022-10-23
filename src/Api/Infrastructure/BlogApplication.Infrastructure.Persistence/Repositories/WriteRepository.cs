@@ -13,14 +13,14 @@ namespace BlogApplication.Infrastructure.Persistence.Repositories
 {
     public class WriteRepository<TEntity> : IWriteRepository<TEntity> where TEntity : BaseEntity
     {
-        private readonly DbContext _context;
+        private readonly BlogApplicationContext _context;
 
-        public WriteRepository(DbContext context)
+        public WriteRepository(BlogApplicationContext context)
         {
             _context = context;
         }
 
-        protected DbSet<TEntity> Table => _context.Set<TEntity>();
+        public DbSet<TEntity> Table => _context.Set<TEntity>();
 
         public virtual async Task<int> AddAsync(TEntity entity)
         {
